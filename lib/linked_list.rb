@@ -43,7 +43,7 @@ class LinkedList
   end
 
   def update_value(key, value)
-    current_node = list.head
+    current_node = @head
     while current_node
       if current_node.key == key
         current_node.value = value
