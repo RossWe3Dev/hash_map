@@ -22,6 +22,7 @@ class HashMap
     list = @buckets[bucket_index]
 
     list ||= LinkedList.new # Create new LL if empty
+    list.update_value(key, value) if list.contains?(key)
     list.append(key, value)
   end
 
@@ -51,5 +52,17 @@ class HashMap
     return nil if index_to_remove.nil? # returns nil for now, will handle errors later
 
     list.remove_at(index_to_remove)
+  end
+
+  def length
+    count = 0
+    @buckets.each do |list|
+      count += list.size unless list.nil?
+    end
+    count
+  end
+
+  def clear
+    @buckets.each_index { |i| @buckets[i] = nil }
   end
 end

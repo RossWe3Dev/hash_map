@@ -30,12 +30,26 @@ class LinkedList
 
   def contains?(key)
     current_node = @head
-    until current_node.next_node == tail
-      return true if current_node.key == key
+    begin
+      until current_node.next_node == tail
+        return true if current_node.key == key
 
+        current_node = current_node.next_node
+      end
+    rescue StandardError
+      false
+    end
+  end
+
+  def update_value(key, value)
+    current_node = list.head
+    while current_node
+      if current_node.key == key
+        current_node.value = value
+        return
+      end
       current_node = current_node.next_node
     end
-    false
   end
 
   def find(key)
