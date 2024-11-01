@@ -9,6 +9,7 @@ test.set("lion", "golden")
 
 puts "\nTesting #get(key)"
 p test.get("lion")
+test.get("cat")
 
 puts "\nTesting #has?(key)"
 p test.has?("dog")
