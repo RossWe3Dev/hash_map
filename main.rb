@@ -11,6 +11,8 @@ p test.get("lion")
 puts "\nTesting #has?(key)"
 p test.has?("dog")
 p test.has?("cat")
+puts "\nTesting #keys"
+p test.keys
 puts "\nTesting #remove(key)"
 p test.remove("dog")
 p test.has?("dog")

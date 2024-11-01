@@ -63,4 +63,18 @@ class HashMap
   def clear
     @buckets.each_index { |i| @buckets[i] = nil }
   end
+
+  def keys
+    keys_array = []
+    @buckets.each do |list|
+      next if list.nil?
+
+      current_node = list.head
+      while current_node
+        keys_array << current_node.key
+        current_node = current_node.next_node
+      end
+    end
+    keys_array
+  end
 end
