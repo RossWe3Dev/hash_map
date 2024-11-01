@@ -1,5 +1,6 @@
 require_relative "linked_list"
 
+# Custom HashMap implementation, starting size: 16 buckets
 class HashMap
   attr_accessor :buckets, :load_factor
 
@@ -17,8 +18,14 @@ class HashMap
     hash_code
   end
 
+  def capacity_check
+    @buckets.length * @load_factor
+  end
+
   def set(key, value)
-    bucket_index = hash(key) % 16
+    resize if length >= capacity_check
+
+    bucket_index = hash(key) % @buckets.length
 
     @buckets[bucket_index] ||= LinkedList.new # Create new LL if empty
     if @buckets[bucket_index].contains?(key)
@@ -28,22 +35,41 @@ class HashMap
     end
   end
 
+  def resize
+    new_size = @buckets.length * 2
+    new_buckets = Array.new(new_size, nil)
+
+    @buckets.each do |list|
+      next if list.nil?
+
+      current_node = list.head
+      while current_node
+        new_index = hash(current_node.key) % new_size
+        new_buckets[new_index] ||= LinkedList.new
+        new_buckets[new_index].append(current_node.key, current_node.value)
+        current_node = current_node.next_node
+      end
+    end
+
+    @buckets = new_buckets
+  end
+
   def get(key)
-    bucket_index = hash(key) % 16
+    bucket_index = hash(key) % @buckets.length
     return nil unless @buckets[bucket_index] # returns nil for now, will handle errors later
 
     @buckets[bucket_index].find(key)
   end
 
   def has?(key)
-    bucket_index = hash(key) % 16
+    bucket_index = hash(key) % @buckets.length
     return @buckets[bucket_index].contains?(key) unless @buckets[bucket_index].nil?
 
     false
   end
 
   def remove(key)
-    bucket_index = hash(key) % 16
+    bucket_index = hash(key) % @buckets.length
     return nil unless @buckets[bucket_index] # returns nil for now, will handle errors later
 
     index_to_remove = @buckets[bucket_index].find_index(key)

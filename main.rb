@@ -29,10 +29,29 @@ puts "\nTesting #remove(key)"
 p test.remove("dog")
 p test.has?("dog")
 
-puts "\nTesting #length"
-p test.length
+puts "\nTesting #length = #{test.length}"
+
+puts "\nTesting max capacity = #{test.capacity_check}"
+
+puts "\nReaching 12 elements"
+test.set("banana", "yellow")
+test.set("carrot", "orange")
+test.set("dog", "brown")
+test.set("frog", "green")
+test.set("grape", "purple")
+test.set("hat", "black")
+test.set("ice cream", "white")
+test.set("jacket", "blue")
+test.set("kite", "pink")
+puts "Hash Map contains #{test.length} elements"
+puts "Hash Map currently has #{test.buckets.length} buckets"
+
+puts "\nAdding 13th element"
+test.set("moon", "silver")
+p test.entries
+puts "Hash Map now contains #{test.length} elements"
+puts "Hash Map currently has #{test.buckets.length} buckets"
 
 puts "\nTesting #clear"
 test.clear
-print "Length after #clear = "
-p test.length
+puts "Length after #clear = #{test.length}"
