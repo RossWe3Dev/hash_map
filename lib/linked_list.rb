@@ -32,13 +32,14 @@ class LinkedList
     current_node = @head
     begin
       until current_node.next_node == tail
-        return true if current_node.key == key
+        break if current_node.key == key
 
         current_node = current_node.next_node
       end
-    rescue StandardError
-      false
+    rescue NoMethodError
+      return false
     end
+    true
   end
 
   def update_value(key, value)

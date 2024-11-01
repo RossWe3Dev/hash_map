@@ -1,7 +1,7 @@
 require_relative "linked_list"
 
 class HashMap
-  attr_reader :hash_map, :load_factor
+  attr_accessor :buckets, :load_factor
 
   def initialize(load_factor = 0.75)
     @buckets = Array.new(16, nil)
@@ -19,39 +19,37 @@ class HashMap
 
   def set(key, value)
     bucket_index = hash(key) % 16
-    list = @buckets[bucket_index]
 
-    list ||= LinkedList.new # Create new LL if empty
-    list.update_value(key, value) if list.contains?(key)
-    list.append(key, value)
+    @buckets[bucket_index] ||= LinkedList.new # Create new LL if empty
+    if @buckets[bucket_index].contains?(key)
+      @buckets[bucket_index].update_value(key, value)
+    else
+      @buckets[bucket_index].append(key, value)
+    end
   end
 
   def get(key)
     bucket_index = hash(key) % 16
-    list = @buckets[bucket_index]
-    return nil unless list # returns nil for now, will handle errors later
+    return nil unless @buckets[bucket_index] # returns nil for now, will handle errors later
 
-    list.find(key)
+    @buckets[bucket_index].find(key)
   end
 
   def has?(key)
     bucket_index = hash(key) % 16
-    list = @buckets[bucket_index]
-
-    return list.contains?(key) unless list.nil?
+    return @buckets[bucket_index].contains?(key) unless @buckets[bucket_index].nil?
 
     false
   end
 
   def remove(key)
     bucket_index = hash(key) % 16
-    list = @buckets[bucket_index]
-    return nil unless list # returns nil for now, will handle errors later
+    return nil unless @buckets[bucket_index] # returns nil for now, will handle errors later
 
-    index_to_remove = list.find_index(key)
+    index_to_remove = @buckets[bucket_index].find_index(key)
     return nil if index_to_remove.nil? # returns nil for now, will handle errors later
 
-    list.remove_at(index_to_remove)
+    @buckets[bucket_index].remove_at(index_to_remove)
   end
 
   def length
