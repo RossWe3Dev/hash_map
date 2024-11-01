@@ -1,11 +1,10 @@
 require_relative "linked_list"
 
-# Implementation of custom HashMap, initializing array of 16 empty buckets
 class HashMap
   attr_reader :hash_map, :load_factor
 
   def initialize(load_factor = 0.75)
-    @hash_map = Array.new(16, nil)
+    @buckets = Array.new(16, nil)
     @load_factor = load_factor
   end
 
@@ -19,15 +18,38 @@ class HashMap
   end
 
   def set(key, value)
-    bucket = hash(key) % 16
-    @hash_map[bucket] = LinkedList.new
-    @hash_map[bucket].append(value)
+    bucket_index = hash(key) % 16
+    list = @buckets[bucket_index]
+
+    list ||= LinkedList.new # Create new LL if empty
+    list.append(key, value)
   end
 
   def get(key)
-    bucket = hash(key) % 16
-    return nil if @hash_map[bucket].nil?
+    bucket_index = hash(key) % 16
+    list = @buckets[bucket_index]
+    return nil unless list # returns nil for now, will handle errors later
 
-    @hash_map[bucket] # returns the whole Linked list, todo: return the wanted value only
+    list.find(key)
+  end
+
+  def has?(key)
+    bucket_index = hash(key) % 16
+    list = @buckets[bucket_index]
+
+    return list.contains?(key) unless list.nil?
+
+    false
+  end
+
+  def remove(key)
+    bucket_index = hash(key) % 16
+    list = @buckets[bucket_index]
+    return nil unless list # returns nil for now, will handle errors later
+
+    index_to_remove = list.find_index(key)
+    return nil if index_to_remove.nil? # returns nil for now, will handle errors later
+
+    list.remove_at(index_to_remove)
   end
 end

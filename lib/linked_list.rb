@@ -1,6 +1,6 @@
 require_relative "node"
 
-# Copied custom implementation of Linked Lists from previous project
+# Custom Linked Lists that stores key-value pairs
 class LinkedList
   attr_reader :head
 
@@ -19,8 +19,8 @@ class LinkedList
     current_node
   end
 
-  def append(value)
-    entry = Node.new(value)
+  def append(key, value)
+    entry = Node.new(key, value)
     if @head.nil?
       @head = entry
     else
@@ -28,9 +28,26 @@ class LinkedList
     end
   end
 
-  def prepend(value)
-    entry = Node.new(value, @head)
-    @head = entry
+  def contains?(key)
+    current_node = @head
+    until current_node.next_node == tail
+      return true if current_node.key == key
+
+      current_node = current_node.next_node
+    end
+    false
+  end
+
+  def find(key)
+    current_node = @head
+
+    while current_node
+      return current_node.value if current_node.key == key
+
+      current_node = current_node.next_node
+    end
+
+    nil
   end
 
   def size
@@ -46,6 +63,20 @@ class LinkedList
     counter
   end
 
+  def find_index(key)
+    current_node = @head
+    index = 0
+
+    while current_node
+      return index if current_node.key == key
+
+      current_node = current_node.next_node
+      index += 1
+    end
+
+    nil
+  end
+
   def at(index)
     return nil if index > size
 
@@ -56,55 +87,15 @@ class LinkedList
     current_node
   end
 
-  def pop
-    return nil if size < 1
+  def insert(index, key, value)
+    return nil if index.negative? || index > size # return nil to handle errors in HashMap class
 
-    current_node = @head
-    current_node = current_node.next_node until current_node.next_node == tail
+    node_to_shift = at(index)
+    entry = Node.new(key, value, node_to_shift)
 
-    current_node.next_node = nil
-  end
-
-  def contains?(value)
-    current_node = @head
-    until current_node.next_node == tail
-      return true if current_node.value == value
-
-      current_node = current_node.next_node
-    end
-    false
-  end
-
-  def find(value, index = 0, current_node = @head)
-    begin
-      until current_node.value == value
-        current_node = current_node.next_node
-        index += 1
-      end
-    rescue StandardError
-      return puts "#{value} is not in the list"
-    end
-
-    puts "#{value} is at index: #{index}"
-  end
-
-  def to_s
-    current_node = @head
-    string = ""
-    until last_node?(current_node)
-      string += "(#{current_node.value}) -> "
-      current_node = current_node.next_node
-    end
-    string + "(#{tail.value}) -> nil"
-  end
-
-  def insert_at(value, index)
-    node_at_current_index = at(index)
-    entry = Node.new(value, node_at_current_index)
     if index.zero?
+      entry.next_node = @head
       @head = entry
-    elsif index > size
-      puts "Cannot insert at an index > than the list's current length"
     else
       previous_node = at(index - 1)
       previous_node.next_node = entry
@@ -112,14 +103,15 @@ class LinkedList
   end
 
   def remove_at(index)
-    node_at_current_index = at(index)
+    return nil if index.negative? || index >= size # return nil to handle errors in HashMap class
+
+    removed_node = at(index)
     if index.zero?
-      @head = node_at_current_index.next_node
-    elsif index >= size
-      puts "There are no items at index: #{index}"
+      @head = removed_node.next_node
     else
       previous_node = at(index - 1)
-      previous_node.next_node = node_at_current_index.next_node
+      previous_node.next_node = removed_node.next_node
     end
+    removed_node.value
   end
 end

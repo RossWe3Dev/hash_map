@@ -1,8 +1,9 @@
-# Node object of Linked Lists, will store HashMap's values
+# Node object of Linked Lists, will store HashMap's k-v pairs
 class Node
-  attr_accessor :value, :next_node
+  attr_accessor :key, :value, :next_node
 
-  def initialize(value = nil, next_node = nil)
+  def initialize(key, value, next_node = nil)
+    @key = key
     @value = value
     @next_node = next_node
   end
