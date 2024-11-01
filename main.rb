@@ -13,6 +13,8 @@ p test.has?("dog")
 p test.has?("cat")
 puts "\nTesting #keys"
 p test.keys
+puts "Testing #values"
+p test.values
 puts "\nTesting #remove(key)"
 p test.remove("dog")
 p test.has?("dog")

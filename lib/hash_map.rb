@@ -77,4 +77,18 @@ class HashMap
     end
     keys_array
   end
+
+  def values
+    values_array = []
+    @buckets.each do |list|
+      next if list.nil?
+
+      current_node = list.head
+      while current_node
+        values_array << current_node.value
+        current_node = current_node.next_node
+      end
+    end
+    values_array
+  end
 end
