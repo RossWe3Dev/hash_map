@@ -1,6 +1,6 @@
 require_relative "linked_list"
 
-# Custom HashMap implementation, starting size: 16 buckets
+# Custom HashMap implementation, starting size = 16 buckets, default load factor = 0.75
 class HashMap
   attr_accessor :buckets, :load_factor
 
@@ -56,7 +56,7 @@ class HashMap
 
   def get(key)
     bucket_index = hash(key) % @buckets.length
-    return nil unless @buckets[bucket_index] # returns nil for now, will handle errors later
+    return puts "Key: '#{key}' is not in the hash" unless @buckets[bucket_index]
 
     @buckets[bucket_index].find(key)
   end
@@ -70,11 +70,9 @@ class HashMap
 
   def remove(key)
     bucket_index = hash(key) % @buckets.length
-    return nil unless @buckets[bucket_index] # returns nil for now, will handle errors later
+    return puts "Key: '#{key}' is not in the hash" unless @buckets[bucket_index]
 
     index_to_remove = @buckets[bucket_index].find_index(key)
-    return nil if index_to_remove.nil? # returns nil for now, will handle errors later
-
     @buckets[bucket_index].remove_at(index_to_remove)
   end
 

@@ -28,6 +28,7 @@ p test.entries
 puts "\nTesting #remove(key)"
 p test.remove("dog")
 p test.has?("dog")
+test.remove("cat")
 
 puts "\nTesting #length = #{test.length}"
 
